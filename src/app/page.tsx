@@ -1,5 +1,8 @@
 "use client";
 
+import { StatusBar } from "@/components/StatusBar";
+import { Footer } from "@/components/Footer";
+
 import React, { useState, useEffect } from 'react';
 import { oblivionEncryptionService } from '@/lib/iexec';
 
@@ -32,6 +35,8 @@ export default function Home() {
   };
 
   return (
+    <>
+      <StatusBar />
     <main className="min-h-screen flex flex-col bg-slate-950 text-slate-300">
       <header className="border-b border-slate-800 bg-slate-900/50 p-4 px-8 flex justify-between items-center backdrop-blur">
         <div className="font-mono text-cyan-500 font-bold tracking-widest text-lg">OBLIVION</div>
@@ -201,5 +206,7 @@ export default function Home() {
         </div>
       </div>
     </main>
+      <Footer />
+    </>
   );
 }
