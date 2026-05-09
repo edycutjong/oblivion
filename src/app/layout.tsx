@@ -13,6 +13,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://oblivion.edycu.dev"),
   title: "Oblivion | Cross-Chain Dark Pool",
   description: "Institutional cross-chain dark pool leveraging Encrypt and Ika SDKs.",
   icons: {
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Oblivion | Cross-Chain Dark Pool",
     description: "Institutional cross-chain dark pool leveraging Encrypt and Ika SDKs.",
-    url: "https://encrypt-ika.vercel.app",
+    url: "https://oblivion.edycu.dev",
     siteName: "Oblivion",
     images: [
       {

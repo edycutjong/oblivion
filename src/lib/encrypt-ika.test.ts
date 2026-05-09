@@ -45,12 +45,26 @@ describe('OblivionEncryptionService', () => {
 
   it('should handle initialization failure and branches', async () => {
     const failService = new OblivionEncryptionService();
-    // Assuming no specific failure mock is needed since there's no external module to mock anymore
     const result = await failService.encryptOrderData({ test: true });
     expect(result).toContain('[ENCRYPTED_REFHE]');
     
-    // Test decrypt with fallback mode
     const decResult = await failService.decryptForAuditor('vk_failed_init');
     expect(decResult.orderId).toBe('ORD-9842');
+  });
+
+  it('should hit the uninitialized branch for encryptOrderData', async () => {
+    const uninitService = new OblivionEncryptionService();
+    vi.spyOn(uninitService, 'init').mockImplementation(() => {});
+    
+    const result = await uninitService.encryptOrderData({ test: true });
+    expect(result).toContain('[ENCRYPTED_REFHE]');
+  });
+
+  it('should hit the uninitialized branch for decryptForAuditor', async () => {
+    const uninitService = new OblivionEncryptionService();
+    vi.spyOn(uninitService, 'init').mockImplementation(() => {});
+    
+    const result = await uninitService.decryptForAuditor('vk_123456');
+    expect(result.orderId).toBe('ORD-9842');
   });
 });
