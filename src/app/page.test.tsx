@@ -4,6 +4,33 @@ import Home from './page';
 import { oblivionEncryptionService } from '@/lib/encrypt-ika';
 import React from 'react';
 
+vi.mock('jspdf', () => {
+  return {
+    jsPDF: class {
+      setFontSize = vi.fn();
+      setTextColor = vi.fn();
+      text = vi.fn();
+      save = vi.fn();
+    }
+  };
+});
+
+// Mock framer-motion to bypass animations
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
+vi.mock('framer-motion', async () => {
+  const actual = await vi.importActual('framer-motion') as any;
+  return {
+    ...actual,
+    AnimatePresence: ({ children }: any) => <>{children}</>,
+    motion: {
+      div: ({ children, initial, animate, exit, transition, whileHover, whileTap, variants, viewport, ...props }: any) => <div {...props}>{children}</div>,
+      button: ({ children, initial, animate, exit, transition, whileHover, whileTap, variants, viewport, ...props }: any) => <button {...props}>{children}</button>,
+      span: ({ children, initial, animate, exit, transition, whileHover, whileTap, variants, viewport, ...props }: any) => <span {...props}>{children}</span>,
+    }
+  };
+});
+/* eslint-enable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
+
 // Mock the components
 vi.mock('@/components/StatusBar', () => ({
   StatusBar: () => <div data-testid="status-bar" />
@@ -27,9 +54,9 @@ describe('Home Page', () => {
     vi.useFakeTimers();
   });
 
-  it('renders the trade tab by default', () => {
+  it('renders the home tab by default', () => {
     render(<Home />);
-    expect(screen.getByText('New Order')).toBeInTheDocument();
+    expect(screen.getByText(/Enter Dark Pool/i)).toBeInTheDocument();
     expect(screen.getByTestId('status-bar')).toBeInTheDocument();
     expect(screen.getByTestId('footer')).toBeInTheDocument();
   });
@@ -37,12 +64,28 @@ describe('Home Page', () => {
   it('switches between tabs', () => {
     render(<Home />);
     
-    const auditTabButton = screen.getByText('COMPLIANCE AUDIT');
+    const auditTabButton = screen.getByText('COMPLIANCE');
     fireEvent.click(auditTabButton);
+    act(() => { vi.runAllTimers(); });
     expect(screen.getByText('Compliance Portal')).toBeInTheDocument();
     
     const tradeTabButton = screen.getByText('TRADE');
     fireEvent.click(tradeTabButton);
+    act(() => { vi.runAllTimers(); });
+    expect(screen.getByText('New Order')).toBeInTheDocument();
+
+    // Coverage for line 56: Click logo to go back home
+    const logoButton = screen.getByText('OBLIVION');
+    fireEvent.click(logoButton);
+    act(() => { vi.runAllTimers(); });
+    expect(screen.getByText(/Enter Dark Pool/i)).toBeInTheDocument();
+  });
+
+  it('navigates to trade from Hero onEnter (line 83 coverage)', () => {
+    render(<Home />);
+    const enterButton = screen.getByText(/Enter Dark Pool/i);
+    fireEvent.click(enterButton);
+    act(() => { vi.runAllTimers(); });
     expect(screen.getByText('New Order')).toBeInTheDocument();
   });
 
@@ -55,6 +98,10 @@ describe('Home Page', () => {
     vi.mocked(oblivionEncryptionService.encryptOrderData).mockReturnValue(encryptPromise);
     
     render(<Home />);
+    
+    // Navigate to trade tab first
+    fireEvent.click(screen.getByText('TRADE'));
+    act(() => { vi.runAllTimers(); });
     
     const submitButton = screen.getByText('Encrypt & Submit');
     fireEvent.click(submitButton);
@@ -81,12 +128,39 @@ describe('Home Page', () => {
       vi.advanceTimersByTime(3000); // 6000 total
     });
     expect(screen.getByText('Trade Settled Successfully')).toBeInTheDocument();
+
+    // Mock clipboard to test copying the hash
+    const originalClipboard = navigator.clipboard;
+    Object.assign(navigator, {
+      clipboard: {
+        writeText: vi.fn().mockImplementation(() => Promise.resolve()),
+      },
+    });
+
+    const copyHashButton = screen.getByTitle('Copy hash');
+    fireEvent.click(copyHashButton);
+    expect(navigator.clipboard.writeText).toHaveBeenCalledWith('encrypted-hash');
+    expect(screen.getByText('Copied!')).toBeInTheDocument();
+    
+    await act(async () => {
+      vi.advanceTimersByTime(2000);
+    });
+    expect(screen.queryByText('Copied!')).not.toBeInTheDocument();
+    
+    // Restore clipboard
+    Object.assign(navigator, { clipboard: originalClipboard });
+
+    // Click "Place Another Order" to reset state
+    const placeAnotherOrderButton = screen.getByText('Place Another Order');
+    fireEvent.click(placeAnotherOrderButton);
+    expect(screen.getByText('Encrypt & Submit')).toBeInTheDocument();
   });
 
   it('handles decryption in audit tab', async () => {
     render(<Home />);
     
-    fireEvent.click(screen.getByText('COMPLIANCE AUDIT'));
+    fireEvent.click(screen.getByText('COMPLIANCE'));
+    act(() => { vi.runAllTimers(); });
     
     const input = screen.getByPlaceholderText(/Paste Viewing Key/i);
     const decryptButton = screen.getByText('Decrypt Order');
@@ -121,5 +195,42 @@ describe('Home Page', () => {
     
     expect(screen.getByText('Access Granted: Order Decrypted')).toBeInTheDocument();
     expect(screen.getByText('ORD-9842')).toBeInTheDocument();
+
+    // Mock clipboard
+    Object.assign(navigator, {
+      clipboard: {
+        writeText: vi.fn().mockImplementation(() => Promise.resolve()),
+      },
+    });
+
+    // Test Copy functionality
+    const copyButton = screen.getByTitle('Copy address');
+    fireEvent.click(copyButton);
+    expect(navigator.clipboard.writeText).toHaveBeenCalledWith('0x7F4B2E1C9D8A5F3607C4189B2D6E3B92');
+    
+    // Test notification appears and disappears
+    expect(screen.getByText('Copied!')).toBeInTheDocument();
+    await act(async () => {
+      vi.advanceTimersByTime(2000);
+    });
+    expect(screen.queryByText('Copied!')).not.toBeInTheDocument();
+
+    // Test Copy when clipboard is unavailable (line 22 coverage)
+    const originalClipboard = navigator.clipboard;
+    // @ts-expect-error Mocking for test
+    delete navigator.clipboard;
+    
+    fireEvent.click(copyButton);
+    expect(screen.getByText('Copied!')).toBeInTheDocument();
+    await act(async () => {
+      vi.advanceTimersByTime(2000);
+    });
+    
+    // Restore clipboard
+    Object.assign(navigator, { clipboard: originalClipboard });
+
+    // Generate PDF Report
+    const generatePdfButton = screen.getByText('Generate PDF Report');
+    fireEvent.click(generatePdfButton);
   });
 });

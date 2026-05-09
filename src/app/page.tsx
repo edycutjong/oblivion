@@ -7,7 +7,8 @@ import { Hero } from "@/components/Hero";
 import React, { useState } from 'react';
 import { oblivionEncryptionService } from '@/lib/encrypt-ika';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Shield, Eye, Activity, CheckCircle2, ArrowRight, Lock } from 'lucide-react';
+import { Shield, Eye, Activity, CheckCircle2, ArrowRight, Lock, Copy } from 'lucide-react';
+import { jsPDF } from 'jspdf';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<'home' | 'trade' | 'audit'>('home');
@@ -15,8 +16,23 @@ export default function Home() {
   const [hash, setHash] = useState('');
   const [viewingKey, setViewingKey] = useState('');
   const [decrypted, setDecrypted] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = (text: string) => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+    }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const handlePlaceOrder = async () => {
+    if (orderStage === 'settled') {
+      setOrderStage('idle');
+      setHash('');
+      return;
+    }
+
     setOrderStage('encrypting');
     
     const hashData = await oblivionEncryptionService.encryptOrderData({ pair: "SOL/ETH", size: "500000" });
@@ -35,6 +51,24 @@ export default function Home() {
     } catch {
       alert("Invalid viewing key.");
     }
+  };
+
+  const handleGenerateReport = () => {
+    const doc = new jsPDF();
+    
+    doc.setFontSize(22);
+    doc.setTextColor(0, 0, 0);
+    doc.text('Oblivion Compliance Report', 20, 20);
+    
+    doc.setFontSize(12);
+    doc.text('Order ID: ORD-9842', 20, 40);
+    doc.text('Trader: 0x7F4B2E1C9D8A5F3607C4189B2D6E3B92', 20, 50);
+    doc.text('Size: $500,000 (SOL)', 20, 60);
+    doc.text('Destination: ETH Mainnet (Ika)', 20, 70);
+    
+    doc.text('This is a securely decrypted order verified via Oblivion Encrypt SDK.', 20, 90);
+    
+    doc.save('oblivion-compliance-report.pdf');
   };
 
   const pageTransition = {
@@ -107,10 +141,10 @@ export default function Home() {
                         <input type="text" defaultValue="500000" className="w-full bg-black/50 border border-white/5 p-4 rounded-xl font-mono text-white focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 outline-none transition-all" />
                       </div>
                       <motion.button 
-                        whileHover={orderStage === 'idle' ? { scale: 1.02 } : {}}
-                        whileTap={orderStage === 'idle' ? { scale: 0.98 } : {}}
+                        whileHover={(orderStage === 'idle' || orderStage === 'settled') ? { scale: 1.02 } : {}}
+                        whileTap={(orderStage === 'idle' || orderStage === 'settled') ? { scale: 0.98 } : {}}
                         onClick={handlePlaceOrder}
-                        disabled={orderStage !== 'idle'}
+                        disabled={orderStage !== 'idle' && orderStage !== 'settled'}
                         className="w-full relative group overflow-hidden bg-linear-to-r from-cyan-600 to-indigo-600 disabled:from-slate-800 disabled:to-slate-800 disabled:text-slate-500 text-white font-bold py-4 rounded-xl mt-4 transition-all"
                       >
                         {orderStage === 'idle' ? (
@@ -118,6 +152,14 @@ export default function Home() {
                             <span className="relative z-10 flex items-center justify-center gap-2">
                               <Shield className="w-4 h-4" />
                               Encrypt & Submit
+                            </span>
+                            <div className="absolute inset-0 bg-white/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                          </>
+                        ) : orderStage === 'settled' ? (
+                          <>
+                            <span className="relative z-10 flex items-center justify-center gap-2">
+                              <CheckCircle2 className="w-4 h-4" />
+                              Place Another Order
                             </span>
                             <div className="absolute inset-0 bg-white/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity"></div>
                           </>
@@ -141,8 +183,39 @@ export default function Home() {
                           <div className={`w-3 h-3 rounded-full ${orderStage === 'encrypting' ? 'bg-cyan-400 animate-ping' : 'bg-cyan-500'}`}></div>
                           <div className="flex-1">
                             <div className="text-sm font-mono text-cyan-400 font-bold">1. Encrypt SDK (Solana)</div>
-                            <div className="font-mono text-slate-300 bg-black/50 p-3 rounded-lg mt-2 border border-white/5 text-sm break-all shadow-inner">
-                              {hash}
+                            <div className="font-mono text-slate-300 bg-black/50 p-3 rounded-lg mt-2 border border-white/5 text-sm break-all shadow-inner flex justify-between items-center gap-2">
+                              <span className="flex-1">{hash}</span>
+                              <button 
+                                type="button"
+                                onClick={() => handleCopy(hash)}
+                                className="flex-shrink-0 flex items-center justify-center text-slate-400 hover:text-cyan-400 transition-colors"
+                                title="Copy hash"
+                              >
+                                <AnimatePresence mode="wait">
+                                  {copied ? (
+                                    <motion.div
+                                      key="copied"
+                                      initial={{ opacity: 0, scale: 0.8 }}
+                                      animate={{ opacity: 1, scale: 1 }}
+                                      exit={{ opacity: 0, scale: 0.8 }}
+                                      className="flex items-center gap-1 bg-green-500/10 text-green-400 text-xs px-2 py-1 rounded border border-green-500/20"
+                                    >
+                                      <CheckCircle2 className="w-3 h-3" />
+                                      <span className="font-bold">Copied!</span>
+                                    </motion.div>
+                                  ) : (
+                                    <motion.div
+                                      key="copy"
+                                      initial={{ opacity: 0, scale: 0.8 }}
+                                      animate={{ opacity: 1, scale: 1 }}
+                                      exit={{ opacity: 0, scale: 0.8 }}
+                                      className="p-1"
+                                    >
+                                      <Copy className="w-4 h-4" />
+                                    </motion.div>
+                                  )}
+                                </AnimatePresence>
+                              </button>
                             </div>
                           </div>
                         </motion.div>
@@ -242,9 +315,42 @@ export default function Home() {
                           <span className="text-slate-500">Order ID</span>
                           <span className="text-white font-bold">ORD-9842</span>
                         </div>
-                        <div className="flex justify-between border-b border-white/5 pb-3">
+                        <div className="flex justify-between items-center border-b border-white/5 pb-3">
                           <span className="text-slate-500">Trader</span>
-                          <span className="text-cyan-400">0x7F...3B92</span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-cyan-400">0x7F...3B92</span>
+                            <button 
+                              type="button"
+                              onClick={() => handleCopy('0x7F4B2E1C9D8A5F3607C4189B2D6E3B92')}
+                              className="flex items-center justify-center text-slate-400 hover:text-cyan-400 transition-colors"
+                              title="Copy address"
+                            >
+                              <AnimatePresence mode="wait">
+                                {copied ? (
+                                  <motion.div
+                                    key="copied"
+                                    initial={{ opacity: 0, scale: 0.8 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.8 }}
+                                    className="flex items-center gap-1 bg-green-500/10 text-green-400 text-xs px-2 py-1 rounded border border-green-500/20"
+                                  >
+                                    <CheckCircle2 className="w-3 h-3" />
+                                    <span className="font-bold">Copied!</span>
+                                  </motion.div>
+                                ) : (
+                                  <motion.div
+                                    key="copy"
+                                    initial={{ opacity: 0, scale: 0.8 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.8 }}
+                                    className="p-1"
+                                  >
+                                    <Copy className="w-4 h-4" />
+                                  </motion.div>
+                                )}
+                              </AnimatePresence>
+                            </button>
+                          </div>
                         </div>
                         <div className="flex justify-between border-b border-white/5 pb-3">
                           <span className="text-slate-500">Size</span>
@@ -259,6 +365,7 @@ export default function Home() {
                       <motion.button 
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
+                        onClick={handleGenerateReport}
                         className="w-full mt-8 bg-green-600/20 hover:bg-green-600/30 border border-green-500/50 text-green-400 font-bold py-4 rounded-xl transition-all flex justify-center items-center gap-2"
                       >
                         <Shield className="w-5 h-5" />
