@@ -188,7 +188,7 @@ export default function Home() {
                               <button 
                                 type="button"
                                 onClick={() => handleCopy(hash)}
-                                className="flex-shrink-0 flex items-center justify-center text-slate-400 hover:text-cyan-400 transition-colors"
+                                className="shrink-0 flex items-center justify-center text-slate-400 hover:text-cyan-400 transition-colors"
                                 title="Copy hash"
                               >
                                 <AnimatePresence mode="wait">
