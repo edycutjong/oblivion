@@ -81,23 +81,18 @@ CREATE POLICY "Users read own orders" ON orders FOR SELECT USING (wallet_address
 
 | Method | Path | Description |
 |---|---|---|
-| POST | `/api/orders` | Place encrypted limit order |
-| GET | `/api/orders` | List user's orders |
-| POST | `/api/match` | Match pending orders (hardcoded P2P) |
-| POST | `/api/settle` | Execute cross-chain MPC settlement |
-| POST | `/api/audit` | Generate compliance report from Viewing Key |
-| GET | `/api/explorer-proof/:txId` | Fetch encrypted vs. decrypted comparison |
+| GET | `/api/health` | Health check endpoint for monitoring |
 
 ## SDK Integration Map
 
 | SDK | Feature | File | Usage |
 |---|---|---|---|
-| **Encrypt** | Encrypted orderbooks | `src/lib/encrypt-client.ts` | Create encrypted order on-chain |
-| **Encrypt** | Private limit orders | `src/lib/encrypt-client.ts` | Hide price + size in order |
-| **Encrypt** | Viewing keys | `src/lib/viewing-key.ts` | Selective disclosure for auditors |
-| **Ika** | MPC signatures | `src/lib/ika-client.ts` | Multi-party computation for settlement |
-| **Ika** | Bridgeless movement | `src/lib/ika-client.ts` | No bridge contracts needed |
-| **Ika** | Cross-chain messaging | `src/lib/ika-client.ts` | Coordinate settlement across chains |
+| **Encrypt** | Encrypted orderbooks | `src/lib/encrypt-ika.ts` | Create encrypted order on-chain |
+| **Encrypt** | Private limit orders | `src/lib/encrypt-ika.ts` | Hide price + size in order |
+| **Encrypt** | Viewing keys | `src/lib/encrypt-ika.ts` | Selective disclosure for auditors |
+| **Ika** | MPC signatures | `src/lib/encrypt-ika.ts` | Multi-party computation for settlement |
+| **Ika** | Bridgeless movement | `src/lib/encrypt-ika.ts` | No bridge contracts needed |
+| **Ika** | Cross-chain messaging | `src/lib/encrypt-ika.ts` | Coordinate settlement across chains |
 
 ## Key Libraries
 
