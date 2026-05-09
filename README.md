@@ -16,7 +16,8 @@
   ![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)
   ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white)
   ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)
-  ![iExec](https://img.shields.io/badge/iExec-FCD116?style=flat&logo=ethereum&logoColor=black)
+  ![Encrypt](https://img.shields.io/badge/Encrypt-000000?style=flat&logo=solana&logoColor=white)
+  ![Ika](https://img.shields.io/badge/Ika-4A90E2?style=flat&logo=solana&logoColor=white)
   ![Vitest](https://img.shields.io/badge/Vitest-FCC72B?style=flat&logo=vitest&logoColor=white)
 </div>
 
@@ -24,6 +25,8 @@
 
 ## 📸 See it in Action
 *(Demo GIF and UI screenshots can be found in the `public` directory)*
+
+[**▶️ Watch the Demo Video**](https://youtube.com/your-demo-link)
 
 <div align="center">
   <img src="public/og-image.png" alt="App Demo" width="100%">
@@ -48,11 +51,18 @@ Cross-chain dark pool: encrypted limit orders on Solana + bridgeless MPC settlem
 | **Frontend** | Next.js 16, React 19 | App Router, SSR, Server Components |
 | **Styling** | Tailwind CSS v4 | High-performance responsive UI |
 | **Language** | TypeScript | Strict type safety across the stack |
-| **Privacy Engine**| iExec DataProtector | Encryption and confidential computing |
-| **Core Logic** | Custom SDK Integration | Bridgeless MPC settlement and order matching |
+| **Privacy Engine**| Encrypt SDK | REFHE protocol for confidential computing |
+| **Custody/Bridge**| Ika SDK | 2PC-MPC dWallets for bridgeless settlement |
 | **Testing** | Vitest | Comprehensive unit and component testing |
 
 For a detailed breakdown of our system architecture and data flow, please refer to the [Architecture Document](docs/ARCHITECTURE.md).
+
+## 🧩 How We Use Encrypt & Ika
+
+**Oblivion** fundamentally relies on both Encrypt and Ika to function:
+
+1. **Encrypt (REFHE protocol):** We use Encrypt to hide the limit order book. When a user places a trade, the `size`, `price`, and `pair` are encrypted on the client side. The Solana program performs order matching on the encrypted data directly. We also use Encrypt's selective disclosure feature to generate "Viewing Keys" so compliance officers can audit trades without exposing the dark pool to MEV bots.
+2. **Ika (2PC-MPC protocol):** We use Ika for zero-trust cross-chain settlement. When the Encrypt matching engine pairs two orders (e.g., SOL for ETH), there is no bridge smart contract holding wrapped assets. Instead, the Ika Network's programmable MPC nodes co-sign the release of funds on both chains natively.
 
 ## 🏆 Sponsor Tracks Targeted
 * **Sponsor Integration**: Encrypt + Ika ($7,500 grand prize)
