@@ -5,9 +5,9 @@
   
   <br/>
   
-  [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen.svg)](https://encrypt-ika.vercel.app)
-  [![Pitch Deck](https://img.shields.io/badge/Pitch-Deck-f59e0b.svg)](https://encrypt-ika.vercel.app/pitch)
-  [![GitHub](https://img.shields.io/badge/GitHub-Repository-black.svg)](https://github.com/edycutjong/frontier-encrypt-ika)
+  [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen.svg)](https://oblivion.edycu.dev)
+  [![Pitch Deck](https://img.shields.io/badge/Pitch-Deck-f59e0b.svg)](https://oblivion.edycu.dev/pitch)
+  [![GitHub](https://img.shields.io/badge/GitHub-Repository-black.svg)](https://github.com/edycutjong/oblivion)
   [![Superteam Earn](https://img.shields.io/badge/Superteam-Earn_Listing-blue.svg)](https://superteam.fun/earn/listing/encrypt-ika-frontier-april-2026)
 
   <br/>
