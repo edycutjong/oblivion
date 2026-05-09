@@ -76,7 +76,7 @@ For a detailed breakdown of our system architecture and data flow, please refer 
    ```bash
    cp .env.example .env.local
    ```
-   Then add your required keys.
+   *Note: Because the Encrypt and Ika SDKs are currently in pre-alpha, this hackathon prototype uses a mock fallback mechanism. You do not need real API keys—you can simply use dummy values (e.g., `dummy_key`) for both `ENCRYPT_API_KEY` and `IKA_PROJECT_ID`.*
 4. **Run the app:** `npm run dev`
 
 
