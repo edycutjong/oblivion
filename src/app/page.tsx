@@ -4,7 +4,7 @@ import { StatusBar } from "@/components/StatusBar";
 import { Footer } from "@/components/Footer";
 
 import React, { useState } from 'react';
-import { oblivionEncryptionService } from '@/lib/iexec';
+import { oblivionEncryptionService } from '@/lib/encrypt-ika';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<'trade' | 'audit'>('trade');

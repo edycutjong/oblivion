@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import Home from './page';
-import { oblivionEncryptionService } from '@/lib/iexec';
+import { oblivionEncryptionService } from '@/lib/encrypt-ika';
 import React from 'react';
 
 // Mock the components
@@ -14,7 +14,7 @@ vi.mock('@/components/Footer', () => ({
 }));
 
 // Mock the encryption service
-vi.mock('@/lib/iexec', () => ({
+vi.mock('@/lib/encrypt-ika', () => ({
   oblivionEncryptionService: {
     encryptOrderData: vi.fn(),
     decryptForAuditor: vi.fn(),

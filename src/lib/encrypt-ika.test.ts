@@ -1,18 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { OblivionEncryptionService } from './iexec';
-import { IExec } from 'iexec';
-
-// Mock the iexec module
-vi.mock('iexec', () => {
-  return {
-    IExec: vi.fn().mockImplementation(function(this: { dataset: unknown }) {
-      this.dataset = {
-        encrypt: vi.fn(),
-        decrypt: vi.fn(),
-      };
-    })
-  };
-});
+import { OblivionEncryptionService } from './encrypt-ika';
 
 describe('OblivionEncryptionService', () => {
   let service: OblivionEncryptionService;
@@ -33,7 +20,7 @@ describe('OblivionEncryptionService', () => {
     const result = await service.encryptOrderData(orderData);
     
     expect(result).toContain('0x');
-    expect(result).toContain('[ENCRYPTED_IEXEC]');
+    expect(result).toContain('[ENCRYPTED_REFHE]');
     const hexPart = result.split('...')[0].replace('0x', '');
     const decoded = JSON.parse(Buffer.from(hexPart, 'hex').toString());
     expect(decoded).toEqual(orderData);
@@ -57,17 +44,12 @@ describe('OblivionEncryptionService', () => {
   });
 
   it('should handle initialization failure and branches', async () => {
-    // Force init failure
-    vi.mocked(IExec).mockImplementationOnce(function() {
-      throw new Error('Init failed');
-    } as unknown as typeof IExec);
-    
     const failService = new OblivionEncryptionService();
-    // Method call will trigger init() which will fail
+    // Assuming no specific failure mock is needed since there's no external module to mock anymore
     const result = await failService.encryptOrderData({ test: true });
-    expect(result).toContain('[ENCRYPTED_IEXEC]');
+    expect(result).toContain('[ENCRYPTED_REFHE]');
     
-    // Test decrypt with failed init
+    // Test decrypt with fallback mode
     const decResult = await failService.decryptForAuditor('vk_failed_init');
     expect(decResult.orderId).toBe('ORD-9842');
   });

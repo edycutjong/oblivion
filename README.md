@@ -8,6 +8,7 @@
   [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen.svg)](https://encrypt-ika.vercel.app)
   [![Pitch Deck](https://img.shields.io/badge/Pitch-Deck-f59e0b.svg)](https://encrypt-ika.vercel.app/pitch)
   [![GitHub](https://img.shields.io/badge/GitHub-Repository-black.svg)](https://github.com/edycutjong/frontier-encrypt-ika)
+  [![Superteam Earn](https://img.shields.io/badge/Superteam-Earn_Listing-blue.svg)](https://superteam.fun/earn/listing/encrypt-ika-frontier-april-2026)
 
   <br/>
 
@@ -51,7 +52,7 @@ Cross-chain dark pool: encrypted limit orders on Solana + bridgeless MPC settlem
 | **Core Logic** | Custom SDK Integration | Bridgeless MPC settlement and order matching |
 | **Testing** | Vitest | Comprehensive unit and component testing |
 
-For a detailed breakdown of our system architecture and data flow, please refer to the [Architecture Document](docs/ARCHITECTURE.md) and [Product Requirements Document](docs/PRD.md).
+For a detailed breakdown of our system architecture and data flow, please refer to the [Architecture Document](docs/ARCHITECTURE.md).
 
 ## 🏆 Sponsor Tracks Targeted
 * **Sponsor Integration**: Encrypt + Ika ($7,500 grand prize)
@@ -59,7 +60,7 @@ For a detailed breakdown of our system architecture and data flow, please refer 
 
 ## 🚀 Run it Locally (For Judges)
 
-1. **Clone the repo:** `git clone https://github.com/edycutjong/frontier-encrypt-ika.git`
+1. **Clone the repo:** `git clone https://github.com/edycutjong/oblivion.git`
 2. **Install dependencies:** `npm install`
 3. **Set up environment variables:**
    ```bash
@@ -68,9 +69,6 @@ For a detailed breakdown of our system architecture and data flow, please refer 
    Then add your required keys.
 4. **Run the app:** `npm run dev`
 
-> **Note for Judges:** 
-> Detailed submission materials, demo scripts, and sponsor defenses are located in the `docs/` directory.
-> Read `docs/SUBMISSION.md` for the complete pitch and `docs/SPONSOR_DEFENSE.md` for technical implementation details.
 
 ---
 
