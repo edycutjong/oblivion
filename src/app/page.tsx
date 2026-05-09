@@ -3,7 +3,7 @@
 import { StatusBar } from "@/components/StatusBar";
 import { Footer } from "@/components/Footer";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { oblivionEncryptionService } from '@/lib/iexec';
 
 export default function Home() {
@@ -27,9 +27,9 @@ export default function Home() {
   const handleDecrypt = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await oblivionEncryptionService.decryptForAuditor(viewingKey, hash);
+      await oblivionEncryptionService.decryptForAuditor(viewingKey);
       setDecrypted(true);
-    } catch (err) {
+    } catch {
       alert("Invalid viewing key.");
     }
   };

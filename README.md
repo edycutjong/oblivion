@@ -1,20 +1,31 @@
 <div align="center">
-  <img src="docs/assets/readme-hero.png" alt="Oblivion Hero" width="100%">
+  <h1>Oblivion 🚀</h1>
+  <p><em>Cross-Chain Encrypted Dark Pool. Encrypted limit orders on Solana + bridgeless MPC settlement on EVM + compliance Viewing Keys.</em></p>
+  <img src="docs/readme-hero.png" alt="Oblivion Hero" width="100%">
   
-  <p><em>Cross-Chain Encrypted Dark Pool</em></p>
+  <br/>
   
   [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen.svg)](https://encrypt-ika.vercel.app)
-  [![Pitch Video](https://img.shields.io/badge/Pitch-Video-red.svg)](https://youtube.com/your-video)
+  [![Pitch Deck](https://img.shields.io/badge/Pitch-Deck-f59e0b.svg)](https://encrypt-ika.vercel.app/pitch)
   [![GitHub](https://img.shields.io/badge/GitHub-Repository-black.svg)](https://github.com/edycutjong/frontier-encrypt-ika)
+
+  <br/>
+
+  ![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat&logo=next.js&logoColor=white)
+  ![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)
+  ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white)
+  ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)
+  ![iExec](https://img.shields.io/badge/iExec-FCD116?style=flat&logo=ethereum&logoColor=black)
+  ![Vitest](https://img.shields.io/badge/Vitest-FCC72B?style=flat&logo=vitest&logoColor=white)
 </div>
 
 ---
 
 ## 📸 See it in Action
-*(Demo GIF and UI screenshots can be found in the `docs/assets` directory)*
+*(Demo GIF and UI screenshots can be found in the `public` directory)*
 
 <div align="center">
-  <img src="docs/assets/og-image.png" alt="App Demo" width="800">
+  <img src="public/og-image.png" alt="App Demo" width="100%">
 </div>
 
 ## 💡 The Problem & Solution
@@ -29,19 +40,18 @@ Cross-chain dark pool: encrypted limit orders on Solana + bridgeless MPC settlem
 - 🎨 **Intuitive UX:** Beautiful, user-centric interface built for scale.
 
 ## 🏗️ Architecture & Tech Stack
-We built the frontend using **Next.js 16** and **Tailwind CSS v4**.
 
+### Tech Stack
+| Component | Technology | Description |
+|-----------|------------|-------------|
+| **Frontend** | Next.js 16, React 19 | App Router, SSR, Server Components |
+| **Styling** | Tailwind CSS v4 | High-performance responsive UI |
+| **Language** | TypeScript | Strict type safety across the stack |
+| **Privacy Engine**| iExec DataProtector | Encryption and confidential computing |
+| **Core Logic** | Custom SDK Integration | Bridgeless MPC settlement and order matching |
+| **Testing** | Vitest | Comprehensive unit and component testing |
 
-```mermaid
-graph TD
-    A[User Wallet] -->|Input| B(Next.js App Router)
-    B -->|Execute| C{SDK Integration}
-    C -->|Return Result| D[Core Logic]
-    D -->|Process| E{Validation & Settlement}
-    E -->|Final State| F[Dashboard UI]
-```
-
-See the [Architecture Document](docs/ARCHITECTURE.md) and [Product Requirements Document](docs/PRD.md) for full system specifications.
+For a detailed breakdown of our system architecture and data flow, please refer to the [Architecture Document](docs/ARCHITECTURE.md) and [Product Requirements Document](docs/PRD.md).
 
 ## 🏆 Sponsor Tracks Targeted
 * **Sponsor Integration**: Encrypt + Ika ($7,500 grand prize)
@@ -49,22 +59,21 @@ See the [Architecture Document](docs/ARCHITECTURE.md) and [Product Requirements 
 
 ## 🚀 Run it Locally (For Judges)
 
-1. **Clone the repo:**
+1. **Clone the repo:** `git clone https://github.com/edycutjong/frontier-encrypt-ika.git`
+2. **Install dependencies:** `npm install`
+3. **Set up environment variables:**
    ```bash
-   git clone https://github.com/edycutjong/frontier-encrypt-ika.git
-   cd frontier-encrypt-ika
+   cp .env.example .env.local
    ```
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-3. **Set up environment variables:** 
-   Rename `.env.example` to `.env.local` and add your keys.
-4. **Run the app:**
-   ```bash
-   npm run dev
-   ```
+   Then add your required keys.
+4. **Run the app:** `npm run dev`
 
 > **Note for Judges:** 
 > Detailed submission materials, demo scripts, and sponsor defenses are located in the `docs/` directory.
 > Read `docs/SUBMISSION.md` for the complete pitch and `docs/SPONSOR_DEFENSE.md` for technical implementation details.
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).
