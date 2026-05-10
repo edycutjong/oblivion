@@ -65,7 +65,7 @@
         -webkit-backdrop-filter: blur(12px);
         border: 1px solid var(--glass-border);
         border-radius: 24px;
-        padding: 40px;
+        padding: 25px 30px;
         box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         position: relative;
         overflow: hidden;
@@ -90,14 +90,14 @@
       .grid-3 {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 30px;
-        margin-top: 40px;
+        gap: 15px;
+        margin-top: 20px;
       }
       
       .grid-2 {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 40px;
+        gap: 20px;
         align-items: center;
       }
 
@@ -182,14 +182,14 @@
         background: var(--dark);
         border: 2px solid var(--secondary);
         border-radius: 50%;
-        width: 80px;
-        height: 80px;
+        width: 60px;
+        height: 60px;
         display: flex;
         align-items: center;
         justify-content: center;
         font-family: 'Orbitron';
         font-weight: bold;
-        font-size: 1.5em;
+        font-size: 1.2em;
         color: #fff;
         box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
       }
@@ -208,10 +208,10 @@
         <section data-transition="fade">
           <div class="glass-card">
             <div class="badge">Colosseum Frontier Hackathon 2026</div>
-            <h1 class="brand-text" style="font-size: 4em; margin-bottom: 0;">Oblivion</h1>
-            <h3 style="color: #cbd5e1; font-weight: 300; letter-spacing: 4px; font-size: 1.2em; margin-top: 10px;">Cross-Chain Encrypted Dark Pool</h3>
+            <h1 class="brand-text" style="font-size: 2.5em; margin-bottom: 0;">Oblivion</h1>
+            <h3 style="color: #cbd5e1; font-weight: 300; letter-spacing: 2px; font-size: 1em; margin-top: 10px;">Cross-Chain Encrypted Dark Pool</h3>
             
-            <div style="margin-top: 50px; display: flex; justify-content: center; gap: 20px;">
+            <div style="margin-top: 30px; display: flex; justify-content: center; gap: 15px;">
               <span style="font-family: 'JetBrains Mono'; color: #64748b; font-size: 0.6em;">#SOLANA</span>
               <span style="font-family: 'JetBrains Mono'; color: #64748b; font-size: 0.6em;">#ENCRYPT_SDK</span>
               <span style="font-family: 'JetBrains Mono'; color: #64748b; font-size: 0.6em;">#IKA_MPC</span>
@@ -222,21 +222,21 @@
         <!-- Slide 2: The Problem -->
         <section data-transition="slide">
           <h2>The <span style="color: #ef4444;">MEV</span> Problem</h2>
-          <div class="grid-2">
-            <div style="text-align: left;">
-              <p style="font-size: 1.1em; color: #f8fafc;">Public orderbooks leak alpha.</p>
-              <p style="font-size: 0.8em; color: #94a3b8; line-height: 1.5;">Institutional traders suffer massive losses due to transparent ledgers.</p>
-              <ul style="margin-top: 30px;">
+          <div style="display: flex; flex-direction: column; gap: 30px; align-items: center; width: 100%; max-width: 800px; margin: 0 auto;">
+            <div style="text-align: left; width: 100%;">
+              <p style="font-size: 0.9em; color: #f8fafc;">Public orderbooks leak alpha.</p>
+              <p style="font-size: 0.7em; color: #94a3b8; line-height: 1.5;">Institutional traders suffer massive losses due to transparent ledgers.</p>
+              <ul style="margin-top: 20px; font-size: 0.8em;">
                 <li><strong>Front-Running:</strong> MEV bots snipe large trades</li>
                 <li><strong>Slippage:</strong> Order sizes are fully visible</li>
                 <li><strong>Bridging Risk:</strong> Cross-chain trading requires vulnerable honeypot bridges</li>
               </ul>
             </div>
-            <div>
-              <div class="glass-card" style="padding: 30px; background: rgba(239, 68, 68, 0.05); border-color: rgba(239, 68, 68, 0.2);">
-                <i data-lucide="eye" style="width: 64px; height: 64px; color: #ef4444; margin-bottom: 20px;"></i>
-                <h4 style="color: #ef4444;">100% Visible</h4>
-                <p style="font-size: 0.7em; color: #cbd5e1;">Standard DEXs broadcast your entire intent before execution.</p>
+            <div style="width: 100%;">
+              <div class="glass-card" style="padding: 20px 30px; background: rgba(239, 68, 68, 0.05); border-color: rgba(239, 68, 68, 0.2);">
+                <i data-lucide="eye" style="width: 48px; height: 48px; color: #ef4444; margin-bottom: 15px;"></i>
+                <h4 style="color: #ef4444; margin-bottom: 10px;">100% Visible</h4>
+                <p style="font-size: 0.7em; color: #cbd5e1; margin: 0;">Standard DEXs broadcast your entire intent before execution.</p>
               </div>
             </div>
           </div>
@@ -269,7 +269,7 @@
         <!-- Slide 4: How it works -->
         <section data-transition="convex">
           <h2>How It Works</h2>
-          <div class="glass-card" style="margin-top: 40px; padding: 50px 30px;">
+          <div class="glass-card" style="margin-top: 20px; padding: 30px 20px;">
             <div class="step-container">
               <div style="text-align: center;">
                 <div class="step">1</div>
@@ -325,8 +325,8 @@
 
         <!-- Slide 6: Demo -->
         <section data-transition="zoom">
-          <h1 class="brand-text" style="font-size: 3em;">Experience Oblivion</h1>
-          <div class="glass-card" style="margin-top: 40px; display: inline-block; padding: 40px 60px;">
+          <h1 class="brand-text" style="font-size: 2em;">Experience Oblivion</h1>
+          <div class="glass-card" style="margin-top: 30px; display: inline-block; padding: 20px 40px;">
             <p style="margin: 15px 0; font-family: 'JetBrains Mono';">
               <span style="color: #94a3b8;">Live App:</span> 
               <a href="https://oblivion.edycu.dev" style="color: var(--primary); text-decoration: none; margin-left: 10px;">oblivion.edycu.dev</a>
