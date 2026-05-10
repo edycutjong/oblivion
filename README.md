@@ -1,6 +1,6 @@
 <div align="center">
   <h1>Oblivion 🚀</h1>
-  <p><em>Cross-Chain Encrypted Dark Pool. Encrypted limit orders on Solana + bridgeless MPC settlement on EVM + compliance Viewing Keys.</em></p>
+  > <p><em>Cross-Chain Encrypted Dark Pool. Encrypted limit orders on Solana + bridgeless MPC settlement on EVM + compliance Viewing Keys.</em></p>
   <img src="docs/readme-hero.png" alt="Oblivion Hero" width="100%">
   
   <br/>
@@ -18,7 +18,7 @@
   ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)
   ![Encrypt](https://img.shields.io/badge/Encrypt-000000?style=flat&logo=solana&logoColor=white)
   ![Ika](https://img.shields.io/badge/Ika-4A90E2?style=flat&logo=solana&logoColor=white)
-  ![Vitest](https://img.shields.io/badge/Vitest-FCC72B?style=flat&logo=vitest&logoColor=white)
+  [![Oblivion CI](https://github.com/edycutjong/oblivion/actions/workflows/ci.yml/badge.svg)](https://github.com/edycutjong/oblivion/actions/workflows/ci.yml)
 </div>
 
 ---

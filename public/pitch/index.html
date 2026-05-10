@@ -3,157 +3,424 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Oblivion Pitch Deck</title>
+    <title>Oblivion — Encrypted Dark Pool</title>
+    
+    <!-- Reveal.js Core -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/black.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/highlight/monokai.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/black.min.css" id="theme">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
-      .reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
-        text-transform: none;
-        font-family: 'Inter', system-ui, sans-serif;
-        font-weight: 700;
-        letter-spacing: -0.02em;
+      :root {
+        --primary: #06b6d4;
+        --secondary: #a855f7;
+        --dark: #020617;
+        --glass-bg: rgba(15, 23, 42, 0.6);
+        --glass-border: rgba(255, 255, 255, 0.1);
       }
-      .reveal .brand-text {
-        background: linear-gradient(90deg, #a855f7, #06b6d4);
+      
+      body {
+        background-color: var(--dark);
+        color: #f8fafc;
+        overflow: hidden;
+      }
+      
+      #particle-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: -1;
+        opacity: 0.6;
+      }
+
+      .reveal {
+        font-family: 'Inter', sans-serif;
+      }
+
+      .reveal h1, .reveal h2, .reveal h3 {
+        font-family: 'Orbitron', sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 20px;
+        font-weight: 700;
+      }
+      
+      .brand-text {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        font-weight: 800;
+        text-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
       }
-      .reveal .subtext {
-        color: #94a3b8;
-        font-size: 0.6em;
-        margin-top: -10px;
+
+      .glass-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        padding: 40px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        position: relative;
+        overflow: hidden;
       }
-      .reveal .slide-background {
-        background: radial-gradient(circle at 50% 50%, #1e1b4b 0%, #000000 100%);
+      
+      .glass-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: -100%;
+        width: 50%; height: 100%;
+        background: linear-gradient(to right, transparent, rgba(255,255,255,0.05), transparent);
+        transform: skewX(-20deg);
+        animation: shine 6s infinite;
       }
-      .reveal ul {
-        display: block;
-        width: 80%;
-        margin: 0 auto;
-        text-align: left;
+      
+      @keyframes shine {
+        0% { left: -100%; }
+        20% { left: 200%; }
+        100% { left: 200%; }
       }
-      .reveal li {
-        margin-bottom: 20px;
-        color: #e2e8f0;
+
+      .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+        margin-top: 40px;
       }
-      .reveal .highlight {
-        color: #22d3ee;
-        font-weight: 600;
-      }
+      
       .grid-2 {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 40px;
         align-items: center;
       }
-      .metric-box {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 12px;
-        padding: 30px;
-        text-align: center;
+
+      .feature-box {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        padding: 30px 20px;
+        transition: transform 0.3s ease, border-color 0.3s ease;
       }
-      .metric-value {
-        font-size: 2.5em;
-        font-weight: bold;
-        color: #06b6d4;
+      
+      .feature-box:hover {
+        transform: translateY(-10px);
+        border-color: var(--primary);
+        background: rgba(6, 182, 212, 0.05);
+      }
+
+      .feature-box i {
+        color: var(--primary);
+        margin-bottom: 20px;
+        display: inline-block;
+      }
+
+      .reveal ul {
+        list-style: none;
+        padding: 0;
         margin: 0;
       }
-      .metric-label {
-        font-size: 0.5em;
-        color: #94a3b8;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        margin-top: 10px;
+
+      .reveal li {
+        margin-bottom: 20px;
+        padding-left: 40px;
+        position: relative;
+        font-size: 0.9em;
+        line-height: 1.4;
+        color: #cbd5e1;
       }
+
+      .reveal li::before {
+        content: '→';
+        position: absolute;
+        left: 0;
+        color: var(--secondary);
+        font-family: 'JetBrains Mono', monospace;
+        font-weight: bold;
+      }
+      
+      .badge {
+        display: inline-block;
+        padding: 8px 16px;
+        border-radius: 30px;
+        font-size: 0.4em;
+        font-family: 'JetBrains Mono', monospace;
+        letter-spacing: 1px;
+        background: rgba(6, 182, 212, 0.1);
+        border: 1px solid var(--primary);
+        color: var(--primary);
+        margin-bottom: 20px;
+      }
+      
+      .step-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 40px;
+        position: relative;
+      }
+      
+      .step-container::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 10%;
+        right: 10%;
+        height: 2px;
+        background: linear-gradient(90deg, var(--primary), var(--secondary));
+        z-index: -1;
+        opacity: 0.3;
+      }
+      
+      .step {
+        background: var(--dark);
+        border: 2px solid var(--secondary);
+        border-radius: 50%;
+        width: 80px;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Orbitron';
+        font-weight: bold;
+        font-size: 1.5em;
+        color: #fff;
+        box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+      }
+
     </style>
   </head>
   <body>
+    
+    <!-- Particle Background -->
+    <canvas id="particle-canvas"></canvas>
+
     <div class="reveal">
       <div class="slides">
         
         <!-- Slide 1: Title -->
-        <section>
-          <h1 class="brand-text">Oblivion</h1>
-          <p>Cross-Chain Encrypted Dark Pool</p>
-          <div style="margin-top: 50px;">
-            <small style="color: #64748b; letter-spacing: 2px; text-transform: uppercase;">Colosseum Frontier Hackathon 2026</small>
+        <section data-transition="fade">
+          <div class="glass-card">
+            <div class="badge">Colosseum Frontier Hackathon 2026</div>
+            <h1 class="brand-text" style="font-size: 4em; margin-bottom: 0;">Oblivion</h1>
+            <h3 style="color: #cbd5e1; font-weight: 300; letter-spacing: 4px; font-size: 1.2em; margin-top: 10px;">Cross-Chain Encrypted Dark Pool</h3>
+            
+            <div style="margin-top: 50px; display: flex; justify-content: center; gap: 20px;">
+              <span style="font-family: 'JetBrains Mono'; color: #64748b; font-size: 0.6em;">#SOLANA</span>
+              <span style="font-family: 'JetBrains Mono'; color: #64748b; font-size: 0.6em;">#ENCRYPT_SDK</span>
+              <span style="font-family: 'JetBrains Mono'; color: #64748b; font-size: 0.6em;">#IKA_MPC</span>
+            </div>
           </div>
         </section>
 
         <!-- Slide 2: The Problem -->
-        <section>
-          <h2>The <span style="color: #ef4444;">Problem</span></h2>
-          <p style="font-size: 1.2em; line-height: 1.4; color: #cbd5e1;">Current solutions lack speed, security, and integration.</p>
-          <ul>
-            <li>Fragmentation across chains and services</li>
-            <li>Poor user experience for web3 adoption</li>
-            <li>Lack of actionable insights</li>
-          </ul>
+        <section data-transition="slide">
+          <h2>The <span style="color: #ef4444;">MEV</span> Problem</h2>
+          <div class="grid-2">
+            <div style="text-align: left;">
+              <p style="font-size: 1.1em; color: #f8fafc;">Public orderbooks leak alpha.</p>
+              <p style="font-size: 0.8em; color: #94a3b8; line-height: 1.5;">Institutional traders suffer massive losses due to transparent ledgers.</p>
+              <ul style="margin-top: 30px;">
+                <li><strong>Front-Running:</strong> MEV bots snipe large trades</li>
+                <li><strong>Slippage:</strong> Order sizes are fully visible</li>
+                <li><strong>Bridging Risk:</strong> Cross-chain trading requires vulnerable honeypot bridges</li>
+              </ul>
+            </div>
+            <div>
+              <div class="glass-card" style="padding: 30px; background: rgba(239, 68, 68, 0.05); border-color: rgba(239, 68, 68, 0.2);">
+                <i data-lucide="eye" style="width: 64px; height: 64px; color: #ef4444; margin-bottom: 20px;"></i>
+                <h4 style="color: #ef4444;">100% Visible</h4>
+                <p style="font-size: 0.7em; color: #cbd5e1;">Standard DEXs broadcast your entire intent before execution.</p>
+              </div>
+            </div>
+          </div>
         </section>
 
         <!-- Slide 3: The Solution -->
-        <section>
-          <h2>The <span class="brand-text">Solution</span></h2>
-          <p><strong>Oblivion</strong> bridges the gap.</p>
-          <div class="grid-2" style="margin-top: 40px;">
-            <div class="metric-box">
-              <div style="font-size: 3em;">⚡</div>
-              <h3 style="margin-top: 20px; font-size: 1.2em;">Fast Execution</h3>
-              <p style="font-size: 0.6em; color: #94a3b8;">High performance integrations</p>
+        <section data-transition="slide">
+          <h2>The <span class="brand-text">Oblivion</span> Protocol</h2>
+          <p style="font-size: 0.9em; color: #94a3b8; margin-bottom: 40px;">Zero-Knowledge. Zero-Bridge. Zero-MEV.</p>
+          
+          <div class="grid-3">
+            <div class="feature-box">
+              <i data-lucide="lock" style="width: 48px; height: 48px;"></i>
+              <h4 style="font-size: 1em;">Encrypted Limits</h4>
+              <p style="font-size: 0.65em; color: #94a3b8;">Order size and price are encrypted via Encrypt FHE on Solana. Matched while hidden.</p>
             </div>
-            <div class="metric-box">
-              <div style="font-size: 3em;">🔒</div>
-              <h3 style="margin-top: 20px; font-size: 1.2em;">Secure by Design</h3>
-              <p style="font-size: 0.6em; color: #94a3b8;">Verifiable actions and robustness</p>
+            <div class="feature-box">
+              <i data-lucide="network" style="width: 48px; height: 48px;"></i>
+              <h4 style="font-size: 1em;">Bridgeless MPC</h4>
+              <p style="font-size: 0.65em; color: #94a3b8;">Ika Network co-signs multi-chain asset release natively. No wrapped tokens.</p>
+            </div>
+            <div class="feature-box">
+              <i data-lucide="shield-check" style="width: 48px; height: 48px;"></i>
+              <h4 style="font-size: 1em;">Viewing Keys</h4>
+              <p style="font-size: 0.65em; color: #94a3b8;">Selective compliance disclosure for audits without compromising the dark pool.</p>
             </div>
           </div>
         </section>
 
-        <!-- Slide 4: Engineering Quality -->
-        <section>
-          <h2>Production Ready</h2>
-          <div class="grid-2" style="margin-top: 40px;">
-            <div class="metric-box">
-              <p class="metric-value">100%</p>
-              <p class="metric-label">Test Coverage</p>
-            </div>
-            <div class="metric-box">
-              <p class="metric-value">Zero</p>
-              <p class="metric-label">Lint Warnings</p>
+        <!-- Slide 4: How it works -->
+        <section data-transition="convex">
+          <h2>How It Works</h2>
+          <div class="glass-card" style="margin-top: 40px; padding: 50px 30px;">
+            <div class="step-container">
+              <div style="text-align: center;">
+                <div class="step">1</div>
+                <p style="font-size: 0.6em; margin-top: 20px; color: #22d3ee; font-weight: bold;">ENCRYPT</p>
+                <p style="font-size: 0.5em; color: #94a3b8;">Client hides order</p>
+              </div>
+              <div style="text-align: center;">
+                <div class="step" style="border-color: #06b6d4;">2</div>
+                <p style="font-size: 0.6em; margin-top: 20px; color: #06b6d4; font-weight: bold;">MATCH</p>
+                <p style="font-size: 0.5em; color: #94a3b8;">FHE logic on Solana</p>
+              </div>
+              <div style="text-align: center;">
+                <div class="step" style="border-color: #a855f7;">3</div>
+                <p style="font-size: 0.6em; margin-top: 20px; color: #a855f7; font-weight: bold;">SETTLE</p>
+                <p style="font-size: 0.5em; color: #94a3b8;">Ika MPC release</p>
+              </div>
             </div>
           </div>
-          <p style="font-size: 0.6em; color: #94a3b8; margin-top: 40px;">
-            Built with Next.js 16 App Router, React 19, Tailwind CSS v4, and Vitest. Fully automated CI pipeline.
-          </p>
         </section>
 
-        <!-- Slide 5: Demo / Links -->
-        <section>
-          <h2>Experience <span class="brand-text">Oblivion</span></h2>
-          <div style="margin-top: 40px; text-align: left; width: 60%; margin: 40px auto; background: rgba(255,255,255,0.05); padding: 30px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
-            <p style="margin: 10px 0;"><strong style="color: #22d3ee;">Live Demo:</strong> <a href="https://oblivion.vercel.app" target="_blank" style="color: #fff;">oblivion.vercel.app</a></p>
-            <p style="margin: 10px 0;"><strong style="color: #22d3ee;">GitHub:</strong> <a href="https://github.com/edycutjong/frontier-encrypt-ika" target="_blank" style="color: #fff;">edycutjong/frontier-encrypt-ika</a></p>
+        <!-- Slide 5: Tech Stack -->
+        <section data-transition="slide">
+          <h2>Architecture</h2>
+          <div class="grid-2">
+            <div>
+              <ul style="font-size: 0.9em;">
+                <li><strong style="color: #fff;">Frontend:</strong> Next.js 16, React 19</li>
+                <li><strong style="color: #fff;">Styling:</strong> Tailwind CSS v4, Framer Motion</li>
+                <li><strong style="color: #fff;">Cryptography:</strong> Encrypt SDK (FHE)</li>
+                <li><strong style="color: #fff;">Cross-Chain:</strong> Ika Network (MPC)</li>
+                <li><strong style="color: #fff;">Networks:</strong> Solana Devnet, Arbitrum Sepolia</li>
+              </ul>
+            </div>
+            <div class="glass-card" style="padding: 30px;">
+              <h4 style="font-family: 'JetBrains Mono'; color: #06b6d4; font-size: 0.9em;">// Production Ready</h4>
+              <div style="margin-top: 20px;">
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 10px 0;">
+                  <span style="font-size: 0.7em; color: #94a3b8;">Test Coverage</span>
+                  <span style="font-size: 0.7em; color: #22c55e;">100%</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 10px 0;">
+                  <span style="font-size: 0.7em; color: #94a3b8;">Lint Warnings</span>
+                  <span style="font-size: 0.7em; color: #22c55e;">0</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 10px 0;">
+                  <span style="font-size: 0.7em; color: #94a3b8;">CI Pipeline</span>
+                  <span style="font-size: 0.7em; color: #22c55e;">Passing</span>
+                </div>
+              </div>
+            </div>
           </div>
-          <p style="font-size: 0.7em; color: #94a3b8; margin-top: 40px;">Thank you for your time.</p>
+        </section>
+
+        <!-- Slide 6: Demo -->
+        <section data-transition="zoom">
+          <h1 class="brand-text" style="font-size: 3em;">Experience Oblivion</h1>
+          <div class="glass-card" style="margin-top: 40px; display: inline-block; padding: 40px 60px;">
+            <p style="margin: 15px 0; font-family: 'JetBrains Mono';">
+              <span style="color: #94a3b8;">Live App:</span> 
+              <a href="https://oblivion.edycu.dev" style="color: var(--primary); text-decoration: none; margin-left: 10px;">oblivion.edycu.dev</a>
+            </p>
+            <p style="margin: 15px 0; font-family: 'JetBrains Mono';">
+              <span style="color: #94a3b8;">GitHub:</span> 
+              <a href="https://github.com/edycutjong/oblivion" style="color: var(--primary); text-decoration: none; margin-left: 23px;">edycutjong/oblivion</a>
+            </p>
+          </div>
         </section>
 
       </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/highlight/highlight.js"></script>
     <script>
+      // Initialize Lucide icons
+      lucide.createIcons();
+
+      // Initialize Reveal.js
       Reveal.initialize({
         hash: true,
+        controls: true,
+        progress: true,
+        center: true,
         transition: 'slide',
         backgroundTransition: 'fade',
-        plugins: [ RevealHighlight ]
+        display: 'flex'
       });
+
+      // Canvas Particle Animation
+      const canvas = document.getElementById('particle-canvas');
+      const ctx = canvas.getContext('2d');
+      
+      let width, height, particles;
+      
+      function init() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+        particles = [];
+        
+        const numParticles = Math.floor(width * height / 15000);
+        
+        for (let i = 0; i < numParticles; i++) {
+          particles.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            radius: Math.random() * 2 + 0.5,
+            vx: (Math.random() - 0.5) * 0.5,
+            vy: (Math.random() - 0.5) * 0.5,
+            color: Math.random() > 0.5 ? '#06b6d4' : '#a855f7'
+          });
+        }
+      }
+      
+      function animate() {
+        requestAnimationFrame(animate);
+        ctx.clearRect(0, 0, width, height);
+        
+        for (let i = 0; i < particles.length; i++) {
+          let p = particles[i];
+          
+          p.x += p.vx;
+          p.y += p.vy;
+          
+          if (p.x < 0 || p.x > width) p.vx = -p.vx;
+          if (p.y < 0 || p.y > height) p.vy = -p.vy;
+          
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = 0.5;
+          ctx.fill();
+          
+          // Connect particles
+          for (let j = i + 1; j < particles.length; j++) {
+            let p2 = particles[j];
+            let dist = Math.sqrt(Math.pow(p.x - p2.x, 2) + Math.pow(p.y - p2.y, 2));
+            
+            if (dist < 120) {
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.strokeStyle = '#ffffff';
+              ctx.globalAlpha = 1 - (dist / 120);
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
+          }
+        }
+      }
+      
+      window.addEventListener('resize', init);
+      init();
+      animate();
     </script>
   </body>
 </html>
