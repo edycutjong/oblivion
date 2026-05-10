@@ -1,6 +1,6 @@
 <div align="center">
   <h1>Oblivion 🚀</h1>
-  > <p><em>Cross-Chain Encrypted Dark Pool. Encrypted limit orders on Solana + bridgeless MPC settlement on EVM + compliance Viewing Keys.</em></p>
+  <p><em>Cross-Chain Encrypted Dark Pool. Encrypted limit orders on Solana + bridgeless MPC settlement on EVM + compliance Viewing Keys.</em></p>
   <img src="docs/readme-hero.png" alt="Oblivion Hero" width="100%">
   
   <br/>
