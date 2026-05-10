@@ -1,427 +1,127 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Oblivion — Encrypted Dark Pool</title>
-    
-    <!-- Reveal.js Core -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/black.min.css" id="theme">
-    
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
-
-    <style>
-      :root {
-        --primary: #06b6d4;
-        --secondary: #a855f7;
-        --dark: #020617;
-        --glass-bg: rgba(15, 23, 42, 0.6);
-        --glass-border: rgba(255, 255, 255, 0.1);
-      }
-      
-      body {
-        background-color: var(--dark);
-        color: #f8fafc;
-        overflow: hidden;
-      }
-      
-      #particle-canvas {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        z-index: -1;
-        opacity: 0.6;
-      }
-
-      .reveal {
-        font-family: 'Inter', sans-serif;
-      }
-
-      .reveal h1, .reveal h2, .reveal h3 {
-        font-family: 'Orbitron', sans-serif;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        margin-bottom: 20px;
-        font-weight: 700;
-      }
-      
-      .brand-text {
-        background: linear-gradient(135deg, var(--primary), var(--secondary));
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
-      }
-
-      .glass-card {
-        background: var(--glass-bg);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid var(--glass-border);
-        border-radius: 24px;
-        padding: 25px 30px;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        position: relative;
-        overflow: hidden;
-      }
-      
-      .glass-card::before {
-        content: '';
-        position: absolute;
-        top: 0; left: -100%;
-        width: 50%; height: 100%;
-        background: linear-gradient(to right, transparent, rgba(255,255,255,0.05), transparent);
-        transform: skewX(-20deg);
-        animation: shine 6s infinite;
-      }
-      
-      @keyframes shine {
-        0% { left: -100%; }
-        20% { left: 200%; }
-        100% { left: 200%; }
-      }
-
-      .grid-3 {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 15px;
-        margin-top: 20px;
-      }
-      
-      .grid-2 {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-        align-items: center;
-      }
-
-      .feature-box {
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        border-radius: 16px;
-        padding: 30px 20px;
-        transition: transform 0.3s ease, border-color 0.3s ease;
-      }
-      
-      .feature-box:hover {
-        transform: translateY(-10px);
-        border-color: var(--primary);
-        background: rgba(6, 182, 212, 0.05);
-      }
-
-      .feature-box i {
-        color: var(--primary);
-        margin-bottom: 20px;
-        display: inline-block;
-      }
-
-      .reveal ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-      }
-
-      .reveal li {
-        margin-bottom: 20px;
-        padding-left: 40px;
-        position: relative;
-        font-size: 0.9em;
-        line-height: 1.4;
-        color: #cbd5e1;
-      }
-
-      .reveal li::before {
-        content: '→';
-        position: absolute;
-        left: 0;
-        color: var(--secondary);
-        font-family: 'JetBrains Mono', monospace;
-        font-weight: bold;
-      }
-      
-      .badge {
-        display: inline-block;
-        padding: 8px 16px;
-        border-radius: 30px;
-        font-size: 0.4em;
-        font-family: 'JetBrains Mono', monospace;
-        letter-spacing: 1px;
-        background: rgba(6, 182, 212, 0.1);
-        border: 1px solid var(--primary);
-        color: var(--primary);
-        margin-bottom: 20px;
-      }
-      
-      .step-container {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-top: 40px;
-        position: relative;
-      }
-      
-      .step-container::before {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 10%;
-        right: 10%;
-        height: 2px;
-        background: linear-gradient(90deg, var(--primary), var(--secondary));
-        z-index: -1;
-        opacity: 0.3;
-      }
-      
-      .step {
-        background: var(--dark);
-        border: 2px solid var(--secondary);
-        border-radius: 50%;
-        width: 60px;
-        height: 60px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: 'Orbitron';
-        font-weight: bold;
-        font-size: 1.2em;
-        color: #fff;
-        box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
-      }
-
-    </style>
-  </head>
-  <body>
-    
-    <!-- Particle Background -->
-    <canvas id="particle-canvas"></canvas>
-
-    <div class="reveal">
-      <div class="slides">
-        
-        <!-- Slide 1: Title -->
-        <section data-transition="fade">
-          <div class="glass-card">
-            <div class="badge">Colosseum Frontier Hackathon 2026</div>
-            <h1 class="brand-text" style="font-size: 2.5em; margin-bottom: 0;">Oblivion</h1>
-            <h3 style="color: #cbd5e1; font-weight: 300; letter-spacing: 2px; font-size: 1em; margin-top: 10px;">Cross-Chain Encrypted Dark Pool</h3>
-            
-            <div style="margin-top: 30px; display: flex; justify-content: center; gap: 15px;">
-              <span style="font-family: 'JetBrains Mono'; color: #64748b; font-size: 0.6em;">#SOLANA</span>
-              <span style="font-family: 'JetBrains Mono'; color: #64748b; font-size: 0.6em;">#ENCRYPT_SDK</span>
-              <span style="font-family: 'JetBrains Mono'; color: #64748b; font-size: 0.6em;">#IKA_MPC</span>
-            </div>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Oblivion — Encrypted Cross-Chain Swaps | Pitch Deck</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/black.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--cyan:#06b6d4;--purple:#a855f7;--green:#22c55e;--red:#ef4444;--amber:#f59e0b;--indigo:#6366f1;--slate-400:#94a3b8;--slate-600:#475569}
+    body{background:#020617}
+    #particle-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+    .reveal{font-family:'Inter',system-ui,sans-serif;position:relative;z-index:1}
+    .reveal .slide-background{background:transparent!important}
+    .reveal .slides section{background:transparent}
+    .reveal h1,.reveal h2,.reveal h3{text-transform:none;font-family:'Inter',system-ui,sans-serif;font-weight:800;letter-spacing:-0.03em}
+    .brand-gradient{background:linear-gradient(135deg,var(--indigo),var(--purple),var(--indigo));background-size:200% 200%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:gs 4s ease infinite}
+    @keyframes gs{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+    .badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:999px;font-size:.55em;font-family:'JetBrains Mono',monospace;font-weight:600;letter-spacing:1px;text-transform:uppercase;border:1px solid rgba(99,102,241,0.3);background:rgba(99,102,241,0.08);color:var(--indigo)}
+    .badge .dot{width:8px;height:8px;border-radius:50%;background:var(--indigo);animation:pulse 2s ease-in-out infinite;box-shadow:0 0 8px var(--indigo)}
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+    .glass-card{background:rgba(255,255,255,0.03);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:32px;transition:all .4s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden}
+    .glass-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent)}
+    .glass-card:hover{border-color:rgba(99,102,241,0.25);transform:translateY(-2px);box-shadow:0 8px 32px rgba(99,102,241,0.1)}
+    .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;align-items:stretch}
+    .metric-value{font-family:'JetBrains Mono',monospace;font-size:3em;font-weight:700;margin:0;line-height:1}
+    .metric-label{font-size:.48em;color:var(--slate-400);text-transform:uppercase;letter-spacing:3px;margin-top:12px;font-weight:600}
+    .icon-ring{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.6em;margin-bottom:16px}
+    .icon-ring.indigo{background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.2)}
+    .icon-ring.cyan{background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2)}
+    .icon-ring.green{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2)}
+    .reveal .problem-list{list-style:none;width:90%;text-align:left}
+    .reveal .problem-list li{padding:16px 20px;margin-bottom:12px;border-radius:12px;background:rgba(239,68,68,0.05);border-left:3px solid var(--red);color:#e2e8f0;font-size:.85em;line-height:1.5}
+    .flow-row{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+    .flow-node{padding:10px 20px;border-radius:10px;font-size:.6em;font-family:'JetBrains Mono',monospace;font-weight:600}
+    .flow-arrow{color:var(--slate-600);font-size:1.2em}
+    .terminal-block{background:#0a0a0a;border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;text-align:left;font-family:'JetBrains Mono',monospace;font-size:.5em}
+    .terminal-header{display:flex;align-items:center;gap:8px;padding:10px 16px;background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06)}
+    .terminal-dot{width:10px;height:10px;border-radius:50%}
+    .terminal-body{padding:16px;line-height:1.8}
+    .t-cyan{color:var(--cyan)}.t-green{color:var(--green)}.t-red{color:var(--red)}.t-indigo{color:var(--indigo)}.t-purple{color:var(--purple)}.t-dim{color:var(--slate-600)}
+    .link-card{display:flex;align-items:center;gap:12px;padding:14px 20px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);text-decoration:none;transition:all .3s ease;margin-bottom:10px}
+    .link-card:hover{background:rgba(99,102,241,0.08);border-color:rgba(99,102,241,0.3);transform:translateX(4px)}
+    .link-card .link-label{font-size:.6em;color:var(--indigo);font-weight:600;text-transform:uppercase;letter-spacing:1px}
+    .link-card .link-url{font-size:.7em;color:#fff;font-family:'JetBrains Mono',monospace}
+    .link-card .link-icon{font-size:1.4em}
+  </style>
+</head>
+<body>
+  <canvas id="particle-canvas"></canvas>
+  <div class="reveal">
+    <div class="slides">
+      <section>
+        <div class="badge"><span class="dot"></span> Encrypt + Ika Network</div>
+        <h1 style="font-size:3.5em;margin-top:24px"><span class="brand-gradient">Oblivion</span></h1>
+        <p style="color:#cbd5e1;font-size:.95em;max-width:640px;margin:16px auto 0;line-height:1.6"><strong style="color:#fff">Encrypted cross-chain swaps.</strong> Private intent on Solana, atomic settlement via Ika MPC — zero bridge risk.</p>
+        <p style="color:var(--slate-400);font-size:.65em;margin-top:40px;letter-spacing:2px;text-transform:uppercase">Colosseum Frontier Hackathon 2026</p>
+      </section>
+      <section>
+        <h2 style="font-size:2em">The <span style="color:var(--red)">Problem</span></h2>
+        <p style="color:var(--slate-400);font-size:.75em;margin-bottom:28px">Cross-chain swaps are public, risky, and extractable.</p>
+        <ul class="problem-list">
+          <li>🔓 <strong>Trade intent leaks</strong> — Cross-chain swaps broadcast intent. Searchers front-run before settlement.</li>
+          <li>🌉 <strong>Bridge vulnerabilities</strong> — $2.5B+ lost to bridge exploits since 2021. Bridges are the weakest link.</li>
+          <li>🐌 <strong>Slow finality</strong> — Cross-chain settlement takes minutes. Users wait. Capital is locked.</li>
+        </ul>
+      </section>
+      <section>
+        <h2 style="font-size:2em">The <span class="brand-gradient">Solution</span></h2>
+        <p style="color:#cbd5e1;font-size:.75em;margin-bottom:24px">Encrypted intent + bridgeless MPC settlement. Your swap is invisible until it's done.</p>
+        <div class="grid-3" style="margin-top:20px">
+          <div class="glass-card" style="text-align:left"><div class="icon-ring indigo">🔒</div><h3 style="font-size:.9em;color:#fff;margin:0 0 8px">Encrypted Intent</h3><p style="font-size:.55em;color:var(--slate-400);line-height:1.6">Encrypt SDK wraps swap intent. No one sees what you're trading until execution.</p></div>
+          <div class="glass-card" style="text-align:left"><div class="icon-ring cyan">⚛️</div><h3 style="font-size:.9em;color:#fff;margin:0 0 8px">Atomic Settlement</h3><p style="font-size:.55em;color:var(--slate-400);line-height:1.6">Ika MPC enables bridgeless cross-chain execution. Both sides settle or neither does.</p></div>
+          <div class="glass-card" style="text-align:left"><div class="icon-ring green">🛡️</div><h3 style="font-size:.9em;color:#fff;margin:0 0 8px">MEV-Proof</h3><p style="font-size:.55em;color:var(--slate-400);line-height:1.6">Encrypted state prevents front-running. Your swap price is the real price.</p></div>
+        </div>
+      </section>
+      <section>
+        <h2 style="font-size:1.8em">Cross-Chain Swap Pipeline</h2>
+        <div class="flow-row" style="margin:30px 0 20px">
+          <div class="flow-node" style="background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.3);color:var(--indigo)">🔒 Encrypt</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-node" style="background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.3);color:var(--purple)">🔍 Match</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-node" style="background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.3);color:var(--cyan)">⚛️ Ika MPC</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-node" style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);color:var(--green)">✅ Settled</div>
+        </div>
+        <div class="terminal-block" style="max-width:680px;margin:0 auto">
+          <div class="terminal-header"><div class="terminal-dot" style="background:#ef4444"></div><div class="terminal-dot" style="background:#f59e0b"></div><div class="terminal-dot" style="background:#22c55e"></div><span style="color:var(--slate-400);margin-left:8px">Oblivion Swap Engine</span></div>
+          <div class="terminal-body">
+            <div><span class="t-dim">[intent]</span> <span class="t-indigo">🔒</span> Swap encrypted: 100 SOL → ETH @ market</div>
+            <div><span class="t-dim">[match]</span> <span class="t-purple">🔍</span> Counterparty matched — hidden order book</div>
+            <div><span class="t-dim">[settle]</span> <span class="t-cyan">⚛️</span> Ika MPC: Solana ↔ Ethereum — atomic, no bridge</div>
+            <div><span class="t-dim">[done]</span> <span class="t-green">✓</span> Settled in 1.2s — MEV extracted: $0.00</div>
           </div>
-        </section>
-
-        <!-- Slide 2: The Problem -->
-        <section data-transition="slide">
-          <h2>The <span style="color: #ef4444;">MEV</span> Problem</h2>
-          <div style="display: flex; flex-direction: column; gap: 30px; align-items: center; width: 100%; max-width: 800px; margin: 0 auto;">
-            <div style="text-align: left; width: 100%;">
-              <p style="font-size: 0.9em; color: #f8fafc;">Public orderbooks leak alpha.</p>
-              <p style="font-size: 0.7em; color: #94a3b8; line-height: 1.5;">Institutional traders suffer massive losses due to transparent ledgers.</p>
-              <ul style="margin-top: 20px; font-size: 0.8em;">
-                <li><strong>Front-Running:</strong> MEV bots snipe large trades</li>
-                <li><strong>Slippage:</strong> Order sizes are fully visible</li>
-                <li><strong>Bridging Risk:</strong> Cross-chain trading requires vulnerable honeypot bridges</li>
-              </ul>
-            </div>
-            <div style="width: 100%;">
-              <div class="glass-card" style="padding: 20px 30px; background: rgba(239, 68, 68, 0.05); border-color: rgba(239, 68, 68, 0.2);">
-                <i data-lucide="eye" style="width: 48px; height: 48px; color: #ef4444; margin-bottom: 15px;"></i>
-                <h4 style="color: #ef4444; margin-bottom: 10px;">100% Visible</h4>
-                <p style="font-size: 0.7em; color: #cbd5e1; margin: 0;">Standard DEXs broadcast your entire intent before execution.</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Slide 3: The Solution -->
-        <section data-transition="slide">
-          <h2>The <span class="brand-text">Oblivion</span> Protocol</h2>
-          <p style="font-size: 0.9em; color: #94a3b8; margin-bottom: 40px;">Zero-Knowledge. Zero-Bridge. Zero-MEV.</p>
-          
-          <div class="grid-3">
-            <div class="feature-box">
-              <i data-lucide="lock" style="width: 48px; height: 48px;"></i>
-              <h4 style="font-size: 1em;">Encrypted Limits</h4>
-              <p style="font-size: 0.65em; color: #94a3b8;">Order size and price are encrypted via Encrypt FHE on Solana. Matched while hidden.</p>
-            </div>
-            <div class="feature-box">
-              <i data-lucide="network" style="width: 48px; height: 48px;"></i>
-              <h4 style="font-size: 1em;">Bridgeless MPC</h4>
-              <p style="font-size: 0.65em; color: #94a3b8;">Ika Network co-signs multi-chain asset release natively. No wrapped tokens.</p>
-            </div>
-            <div class="feature-box">
-              <i data-lucide="shield-check" style="width: 48px; height: 48px;"></i>
-              <h4 style="font-size: 1em;">Viewing Keys</h4>
-              <p style="font-size: 0.65em; color: #94a3b8;">Selective compliance disclosure for audits without compromising the dark pool.</p>
-            </div>
-          </div>
-        </section>
-
-        <!-- Slide 4: How it works -->
-        <section data-transition="convex">
-          <h2>How It Works</h2>
-          <div class="glass-card" style="margin-top: 20px; padding: 30px 20px;">
-            <div class="step-container">
-              <div style="text-align: center;">
-                <div class="step">1</div>
-                <p style="font-size: 0.6em; margin-top: 20px; color: #22d3ee; font-weight: bold;">ENCRYPT</p>
-                <p style="font-size: 0.5em; color: #94a3b8;">Client hides order</p>
-              </div>
-              <div style="text-align: center;">
-                <div class="step" style="border-color: #06b6d4;">2</div>
-                <p style="font-size: 0.6em; margin-top: 20px; color: #06b6d4; font-weight: bold;">MATCH</p>
-                <p style="font-size: 0.5em; color: #94a3b8;">FHE logic on Solana</p>
-              </div>
-              <div style="text-align: center;">
-                <div class="step" style="border-color: #a855f7;">3</div>
-                <p style="font-size: 0.6em; margin-top: 20px; color: #a855f7; font-weight: bold;">SETTLE</p>
-                <p style="font-size: 0.5em; color: #94a3b8;">Ika MPC release</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Slide 5: Tech Stack -->
-        <section data-transition="slide">
-          <h2>Architecture</h2>
-          <div class="grid-2">
-            <div>
-              <ul style="font-size: 0.9em;">
-                <li><strong style="color: #fff;">Frontend:</strong> Next.js 16, React 19</li>
-                <li><strong style="color: #fff;">Styling:</strong> Tailwind CSS v4, Framer Motion</li>
-                <li><strong style="color: #fff;">Cryptography:</strong> Encrypt SDK (FHE)</li>
-                <li><strong style="color: #fff;">Cross-Chain:</strong> Ika Network (MPC)</li>
-                <li><strong style="color: #fff;">Networks:</strong> Solana Devnet, Arbitrum Sepolia</li>
-              </ul>
-            </div>
-            <div class="glass-card" style="padding: 30px;">
-              <h4 style="font-family: 'JetBrains Mono'; color: #06b6d4; font-size: 0.9em;">// Production Ready</h4>
-              <div style="margin-top: 20px;">
-                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 10px 0;">
-                  <span style="font-size: 0.7em; color: #94a3b8;">Test Coverage</span>
-                  <span style="font-size: 0.7em; color: #22c55e;">100%</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 10px 0;">
-                  <span style="font-size: 0.7em; color: #94a3b8;">Lint Warnings</span>
-                  <span style="font-size: 0.7em; color: #22c55e;">0</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; padding: 10px 0;">
-                  <span style="font-size: 0.7em; color: #94a3b8;">CI Pipeline</span>
-                  <span style="font-size: 0.7em; color: #22c55e;">Passing</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Slide 6: Demo -->
-        <section data-transition="zoom">
-          <h1 class="brand-text" style="font-size: 2em;">Experience Oblivion</h1>
-          <div class="glass-card" style="margin-top: 30px; display: inline-block; padding: 20px 40px;">
-            <p style="margin: 15px 0; font-family: 'JetBrains Mono';">
-              <span style="color: #94a3b8;">Live App:</span> 
-              <a href="https://oblivion.edycu.dev" style="color: var(--primary); text-decoration: none; margin-left: 10px;">oblivion.edycu.dev</a>
-            </p>
-            <p style="margin: 15px 0; font-family: 'JetBrains Mono';">
-              <span style="color: #94a3b8;">GitHub:</span> 
-              <a href="https://github.com/edycutjong/oblivion" style="color: var(--primary); text-decoration: none; margin-left: 23px;">edycutjong/oblivion</a>
-            </p>
-          </div>
-        </section>
-
-      </div>
+        </div>
+      </section>
+      <section>
+        <h2 style="font-size:1.8em">Production Ready</h2>
+        <div class="grid-3" style="margin-top:24px">
+          <div class="glass-card" style="text-align:center"><p class="metric-value" style="color:var(--cyan)">100%</p><p class="metric-label">Test Coverage</p></div>
+          <div class="glass-card" style="text-align:center"><p class="metric-value" style="color:var(--green)">$0</p><p class="metric-label">MEV Leaked</p></div>
+          <div class="glass-card" style="text-align:center"><p class="metric-value" style="color:var(--indigo)">&lt;2s</p><p class="metric-label">Cross-Chain</p></div>
+        </div>
+        <div class="flow-row" style="margin-top:28px;gap:20px;flex-wrap:wrap">
+          <span class="badge" style="font-size:.45em">Next.js 16</span><span class="badge" style="font-size:.45em">React 19</span><span class="badge" style="font-size:.45em">Encrypt SDK</span><span class="badge" style="font-size:.45em">Ika Network</span><span class="badge" style="font-size:.45em">Tailwind v4</span>
+        </div>
+      </section>
+      <section>
+        <h2 style="font-size:2em">Experience <span class="brand-gradient">Oblivion</span></h2>
+        <div style="max-width:420px;margin:32px auto 0">
+          <a href="https://oblivion.edycu.dev" target="_blank" class="link-card"><span class="link-icon">🚀</span><div><div class="link-label">Live Demo</div><div class="link-url">oblivion.edycu.dev</div></div></a>
+          <a href="https://github.com/edycutjong/oblivion" target="_blank" class="link-card"><span class="link-icon">📦</span><div><div class="link-label">Source Code</div><div class="link-url">edycutjong/oblivion</div></div></a>
+        </div>
+        <p style="font-size:.55em;color:var(--slate-600);margin-top:36px;font-style:italic">Swap across chains. Leave no trace.</p>
+      </section>
     </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.js"></script>
-    <script>
-      // Initialize Lucide icons
-      lucide.createIcons();
-
-      // Initialize Reveal.js
-      Reveal.initialize({
-        hash: true,
-        controls: true,
-        progress: true,
-        center: true,
-        transition: 'slide',
-        backgroundTransition: 'fade',
-        display: 'flex'
-      });
-
-      // Canvas Particle Animation
-      const canvas = document.getElementById('particle-canvas');
-      const ctx = canvas.getContext('2d');
-      
-      let width, height, particles;
-      
-      function init() {
-        width = canvas.width = window.innerWidth;
-        height = canvas.height = window.innerHeight;
-        particles = [];
-        
-        const numParticles = Math.floor(width * height / 15000);
-        
-        for (let i = 0; i < numParticles; i++) {
-          particles.push({
-            x: Math.random() * width,
-            y: Math.random() * height,
-            radius: Math.random() * 2 + 0.5,
-            vx: (Math.random() - 0.5) * 0.5,
-            vy: (Math.random() - 0.5) * 0.5,
-            color: Math.random() > 0.5 ? '#06b6d4' : '#a855f7'
-          });
-        }
-      }
-      
-      function animate() {
-        requestAnimationFrame(animate);
-        ctx.clearRect(0, 0, width, height);
-        
-        for (let i = 0; i < particles.length; i++) {
-          let p = particles[i];
-          
-          p.x += p.vx;
-          p.y += p.vy;
-          
-          if (p.x < 0 || p.x > width) p.vx = -p.vx;
-          if (p.y < 0 || p.y > height) p.vy = -p.vy;
-          
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-          ctx.fillStyle = p.color;
-          ctx.globalAlpha = 0.5;
-          ctx.fill();
-          
-          // Connect particles
-          for (let j = i + 1; j < particles.length; j++) {
-            let p2 = particles[j];
-            let dist = Math.sqrt(Math.pow(p.x - p2.x, 2) + Math.pow(p.y - p2.y, 2));
-            
-            if (dist < 120) {
-              ctx.beginPath();
-              ctx.moveTo(p.x, p.y);
-              ctx.lineTo(p2.x, p2.y);
-              ctx.strokeStyle = '#ffffff';
-              ctx.globalAlpha = 1 - (dist / 120);
-              ctx.lineWidth = 0.5;
-              ctx.stroke();
-            }
-          }
-        }
-      }
-      
-      window.addEventListener('resize', init);
-      init();
-      animate();
-    </script>
-  </body>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.js"></script>
+  <script>
+    (function(){const c=document.getElementById('particle-canvas'),x=c.getContext('2d');let p=[];const N=75;function r(){c.width=innerWidth;c.height=innerHeight}addEventListener('resize',r);r();class P{constructor(){this.r()}r(){this.x=Math.random()*c.width;this.y=Math.random()*c.height;this.vx=(Math.random()-.5)*.3;this.vy=(Math.random()-.5)*.3;this.s=Math.random()*1.5+.5;this.o=Math.random()*.5+.1}u(){this.x+=this.vx;this.y+=this.vy;if(this.x<0||this.x>c.width)this.vx*=-1;if(this.y<0||this.y>c.height)this.vy*=-1}d(){x.beginPath();x.arc(this.x,this.y,this.s,0,Math.PI*2);x.fillStyle=`rgba(99,102,241,${this.o})`;x.fill()}}for(let i=0;i<N;i++)p.push(new P);function a(){x.clearRect(0,0,c.width,c.height);p.forEach(q=>{q.u();q.d()});for(let i=0;i<p.length;i++)for(let j=i+1;j<p.length;j++){const dx=p[i].x-p[j].x,dy=p[i].y-p[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<150){x.beginPath();x.moveTo(p[i].x,p[i].y);x.lineTo(p[j].x,p[j].y);x.strokeStyle=`rgba(99,102,241,${.06*(1-d/150)})`;x.lineWidth=.5;x.stroke()}}requestAnimationFrame(a)}a()})();
+    Reveal.initialize({hash:true,transition:'fade',transitionSpeed:'slow',backgroundTransition:'fade',controls:true,progress:true,center:true,width:1200,height:700});
+  </script>
+</body>
 </html>
